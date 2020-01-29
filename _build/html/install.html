@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
+<head>
+    <meta charset="utf-8"/>
+    <title>JBrowse中文文档 &#8212; JBrowse 0.0.1 文档</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css"/>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
+    <script type="text/javascript" id="documentation_options" data-url_root="./"
+            src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html"/>
+    <link rel="search" title="搜索" href="search.html"/>
+    <link rel="next" title="索引文件格式" href="index_file.html"/>
+    <link rel="prev" title="JBrowse中文翻译" href="index.html"/>
+
+    <link rel="stylesheet" href="_static/custom.css" type="text/css"/>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9"/>
+
+</head>
+<body>
+
+
+<div class="document">
+    <div class="documentwrapper">
+        <div class="bodywrapper">
+
+
+            <div class="body" role="main">
+
+                <div class="section" id="jbrowse">
+                    <h1>JBrowse中文文档<a class="headerlink" href="#jbrowse" title="永久链接至标题">¶</a></h1>
+                </div>
+                <div class="section" id="id1">
+                    <h1>安装<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+                    <p>一个最通常的情况是,下载JBrowse之后,将整个项目文件夹放在web服务器的目录下(在ubuntu中通常是/var/www/),JBrowse就是一个静态站点,
+                        它通过index.html中的js进行数据处理,不需要后端处理.</p>
+                    <div class="section" id="id2">
+                        <h2>安装JBrowse之前需要做什么<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+                        <p>有一些前提条件可以帮助您进行JBrowse设置，包括</p>
+                        <ul class="simple">
+                            <li><p>unix操作系统系列– MacOSX, Linux, 或者 WSL on Windows(在windows10的应用商店中下载ubuntu,使用cmd输入命令 <code
+                                    class="docutils literal notranslate"><span class="pre">bash</span></code>
+                                即可进入linux环境)</p></li>
+                            <li><p>Web服务器-JBrowse是一组静态文件，可与Apache或Nginx一起使用</p></li>
+                            <li><p>命令行技能-熟悉命令行将帮助您更好的使用本教程</p></li>
+                            <li><p>Sudo访问-sudo是没有必要的，除非您需要它来修改Web服务器文件，例如 在/ var / www中,修改权限</p></li>
+                        </ul>
+                        <p>如果您不具备所有这些条件，请考虑使用JBrowse Desktop，因为它不需要命令行，并且易于在所有操作系统上使用：）</p>
+                    </div>
+                    <div class="section" id="id3">
+                        <h2>导入JBrowse插件<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+                        <p>
+                            如果您使用的是JBrowse插件，则还需要安装Node.js版本6或更高版本。请按照https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
+                            中的步骤在ubuntu上安装node.js</p>
+                    </div>
+                    <div class="section" id="id4">
+                        <h2>下载JBrowse的发行版本<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span>curl -L -O https://github.com/GMOD/jbrowse/releases/download/1.16.7-release/JBrowse-1.16.7.zip
+unzip JBrowse-1.16.7.zip
+sudo mv JBrowse-1.16.7 /var/www/html/jbrowse
+cd /var/www/html
+sudo chown `whoami` jbrowse
+cd jbrowse
+./setup.sh
+</pre>
+                            </div>
+                        </div>
+                        <div class="admonition note">
+                            <p class="admonition-title">注解</p>
+                            <p>文档假设你已经安装了web服务器,例如apache.
+                                在ubuntu上安装apache使用命令 <code class="docutils literal notranslate"><span
+                                        class="pre">apt</span> <span class="pre">install</span> <span class="pre">apache2</span></code>
+                                会在/var中自动生成www文件夹,里面会有index.html初始文件.
+                                访问ubuntu服务器ip即可查看该页面.将JBrowse项目文件夹放入/var/www中,配置apache,apache具体配置自行搜索</p>
+                        </div>
+                    </div>
+                    <div class="section" id="jbrowsejbrowse">
+                        <h2>如果将JBrowse作为插件需要备用JBrowse设置<a class="headerlink" href="#jbrowsejbrowse"
+                                                          title="永久链接至标题">¶</a></h2>
+                        <p>JBrowse现在在构建时捆绑了插件，因此，如果您使用插件或自己修改jbrowse源代码，则必须下载源代码https://github.com/GMOD/jbrowse</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="n">git</span> <span
+                                    class="n">clone</span> <span class="n">https</span><span class="p">:</span><span
+                                    class="o">//</span><span class="n">github</span><span class="o">.</span><span
+                                    class="n">com</span><span class="o">/</span><span class="n">gmod</span><span
+                                    class="o">/</span><span class="n">jbrowse</span>
+<span class="n">cd</span> <span class="n">jbrowse</span>
+<span class="n">git</span> <span class="n">checkout</span> <span class="mf">1.16</span><span class="o">.</span><span
+                                        class="mi">7</span><span class="o">-</span><span class="n">release</span> <span
+                                        class="c1"># or version of your choice</span>
+<span class="o">./</span><span class="n">setup</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">npm</span> <span class="n">run</span> <span class="n">start</span> <span class="c1"># starts a express.js dev server on port 8082, alternatively move the entire jbrowse dir to /var/www/html as above</span>
+</pre>
+                            </div>
+                        </div>
+                        <div class="admonition note">
+                            <p class="admonition-title">注解</p>
+                            <p>使用npm run watch自动获取对您所做的代码所做的更改（但是，如果添加或删除文件，则需要重新启动）
+                                对于中国的用户,如果使用自定义配置,推荐使用npm镜像</p>
+                        </div>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="n">npm</span> <span
+                                    class="n">config</span> <span class="nb">set</span> <span class="n">registry</span> <span
+                                    class="n">http</span><span class="p">:</span><span class="o">//</span><span
+                                    class="n">r</span><span class="o">.</span><span class="n">cnpmjs</span><span
+                                    class="o">.</span><span class="n">org</span>
+<span class="n">npm</span> <span class="n">config</span> <span class="nb">set</span> <span class="n">puppeteer_download_host</span><span
+                                        class="o">=</span><span class="n">http</span><span class="p">:</span><span
+                                        class="o">//</span><span class="n">cnpmjs</span><span class="o">.</span><span
+                                        class="n">org</span><span class="o">/</span><span class="n">mirrors</span>
+<span class="n">export</span> <span class="n">ELECTRON_MIRROR</span><span class="o">=</span><span class="s2">&quot;http://cnpmjs.org/mirrors/electron/&quot;</span>
+</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section" id="id5">
+                        <h2>祝贺!<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
+                        <p>您应该看到一条消息，“Congratulations, JBrowse is on the web”，并带有指向“ Volvox example data”的链接。
+                            如果您没有看到此消息，则可能是错过了设置步骤</p>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <h1 class="logo"><a href="index.html">JBrowse</a></h1>
+
+
+            <h3>导航</h3>
+            <p class="caption"><span class="caption-text">Contents:</span></p>
+            <ul class="current">
+                <li class="toctree-l1 current"><a class="current reference internal" href="#">JBrowse中文文档</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="#id1">安装</a>
+                    <ul>
+                        <li class="toctree-l2"><a class="reference internal" href="#id2">安装JBrowse之前需要做什么</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#id3">导入JBrowse插件</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#id4">下载JBrowse的发行版本</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#jbrowsejbrowse">如果将JBrowse作为插件需要备用JBrowse设置</a>
+                        </li>
+                        <li class="toctree-l2"><a class="reference internal" href="#id5">祝贺!</a></li>
+                    </ul>
+                </li>
+                <li class="toctree-l1"><a class="reference internal" href="index_file.html">索引文件格式</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="class_guide.html">经典快速入门指南</a></li>
+            </ul>
+
+            <div class="relations">
+                <h3>Related Topics</h3>
+                <ul>
+                    <li><a href="index.html">Documentation overview</a>
+                        <ul>
+                            <li>Previous: <a href="index.html" title="上一章">JBrowse中文翻译</a></li>
+                            <li>Next: <a href="index_file.html" title="下一章">索引文件格式</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="searchbox" style="display: none" role="search">
+                <h3 id="searchlabel">快速搜索</h3>
+                <div class="searchformwrapper">
+                    <form class="search" action="search.html" method="get">
+                        <input type="text" name="q" aria-labelledby="searchlabel"/>
+                        <input type="submit" value="转向"/>
+                    </form>
+                </div>
+            </div>
+            <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+        </div>
+    </div>
+    <div class="clearer"></div>
+</div>
+<div class="footer">
+    &copy;2020, zhoupeng.
+
+    |
+    Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
+    &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+
+    |
+    <a href="_sources/install.rst.txt"
+       rel="nofollow">Page source</a>
+</div>
+
+
+</body>
+</html>

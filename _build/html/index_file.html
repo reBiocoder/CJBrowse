@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
+<head>
+    <meta charset="utf-8"/>
+    <title>索引文件格式 &#8212; JBrowse 0.0.1 文档</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css"/>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
+    <script type="text/javascript" id="documentation_options" data-url_root="./"
+            src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html"/>
+    <link rel="search" title="搜索" href="search.html"/>
+    <link rel="next" title="经典快速入门指南" href="class_guide.html"/>
+    <link rel="prev" title="JBrowse中文文档" href="install.html"/>
+
+    <link rel="stylesheet" href="_static/custom.css" type="text/css"/>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9"/>
+
+</head>
+<body>
+
+
+<div class="document">
+    <div class="documentwrapper">
+        <div class="bodywrapper">
+
+
+            <div class="body" role="main">
+
+                <div class="section" id="id1">
+                    <h1>索引文件格式<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+                    <p>在本节中，我们将使用“索引文件格式”，以纯文本配置为例</p>
+                    <div class="section" id="fasta">
+                        <h2>加载FASTA格式的索引<a class="headerlink" href="#fasta" title="永久链接至标题">¶</a></h2>
+                        <p>首先，我们假设正在建立Volvox mythicus（Volvox属中的一个神话物种）的基因组。
+                            Volvox基因组已由测序中心在2018年进行了测序，他们想立即设置JBrowse。
+                            他们为我们提供了指向其FASTA文件的链接，我们将下载该文件</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="n">mkdir</span> <span
+                                    class="n">data</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">L</span> <span class="n">https</span><span
+                                        class="p">:</span><span class="o">//</span><span class="n">jbrowse</span><span
+                                        class="o">.</span><span class="n">org</span><span class="o">/</span><span
+                                        class="n">code</span><span class="o">/</span><span class="n">JBrowse</span><span
+                                        class="o">-</span><span class="mf">1.16</span><span class="o">.</span><span
+                                        class="mi">7</span><span class="o">/</span><span class="n">docs</span><span
+                                        class="o">/</span><span class="n">tutorial</span><span class="o">/</span><span
+                                        class="n">data_files</span><span class="o">/</span><span class="n">volvox</span><span
+                                        class="o">.</span><span class="n">fa</span> <span class="o">&gt;</span> <span
+                                        class="n">data</span><span class="o">/</span><span class="n">volvox</span><span
+                                        class="o">.</span><span class="n">fa</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>我们将使用samtools的 <code class="docutils literal notranslate"><span
+                                class="pre">faidx</span></code> 命令来创建“ FASTA index”.
+                            FASTA index能将非常大的FASTA文件“按需”下载到JBrowse中.
+                            例如, 仅下载特定视图所需的序列.</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="n">samtools</span> <span class="n">faidx</span> <span
+                                    class="n">data</span><span class="o">/</span><span class="n">volvox</span><span
+                                    class="o">.</span><span class="n">fa</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>FASTA index将是一个名为volvox.fa.fai的文件。 然后，我们将这些文件移到JBrowse可以使用的“数据目录”中</p>
+                        <p>然后创建文件data / tracks.conf,使用以下内容</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="p">[</span><span
+                                    class="n">GENERAL</span><span class="p">]</span>
+<span class="n">refSeqs</span><span class="o">=</span><span class="n">volvox</span><span class="o">.</span><span
+                                        class="n">fa</span><span class="o">.</span><span class="n">fai</span>
+<span class="p">[</span><span class="n">tracks</span><span class="o">.</span><span class="n">refseq</span><span
+                                        class="p">]</span>
+<span class="n">urlTemplate</span><span class="o">=</span><span class="n">volvox</span><span class="o">.</span><span
+                                        class="n">fa</span>
+<span class="n">storeClass</span><span class="o">=</span><span class="n">JBrowse</span><span class="o">/</span><span
+                                        class="n">Store</span><span class="o">/</span><span
+                                        class="n">SeqFeature</span><span class="o">/</span><span
+                                        class="n">IndexedFasta</span>
+<span class="nb">type</span><span class="o">=</span><span class="n">Sequence</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>此时，您应该可以打开http://localhost/jbrowse/?data=data（或者打开http：//localhost/jbrowse/),
+                            您就会看到带有参考序列轨迹的基因组。
+                            示例图如下:</p>
+                        <img alt="https://i.loli.net/2020/01/29/oBIGKYMH3sJTEyX.png"
+                             src="https://i.loli.net/2020/01/29/oBIGKYMH3sJTEyX.png"/>
+                    </div>
+                    <div class="section" id="tabix-gff3">
+                        <h2>加载Tabix GFF3<a class="headerlink" href="#tabix-gff3" title="永久链接至标题">¶</a></h2>
+                        <p>我们将使用的新生成的“基因注释”文件</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="n">curl</span> <span
+                                    class="o">-</span><span class="n">L</span> <span class="n">https</span><span
+                                    class="p">:</span><span class="o">//</span><span class="n">jbrowse</span><span
+                                    class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">code</span><span
+                                    class="o">/</span><span class="n">JBrowse</span><span class="o">-</span><span
+                                    class="mf">1.16</span><span class="o">.</span><span class="mi">7</span><span
+                                    class="o">/</span><span class="n">docs</span><span class="o">/</span><span
+                                    class="n">tutorial</span><span class="o">/</span><span
+                                    class="n">data_files</span><span class="o">/</span><span
+                                    class="n">volvox</span><span class="o">.</span><span class="n">gff3</span> <span
+                                    class="o">&gt;</span> <span class="n">data</span><span class="o">/</span><span
+                                    class="n">volvox</span><span class="o">.</span><span class="n">gff3</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>当我们处理GFF3以在JBrowse中使用时，我们的目标是使用GFF3Tabix格式。 T
+                            abix格式允许随机访问类似于Indexed FASTA的基因组区域。因此,
+                            我们必须首先对GFF进行排序以为Tabx做准备</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="n">sort</span> <span
+                                    class="o">-</span><span class="n">k1</span><span class="p">,</span><span class="mi">1</span> <span
+                                    class="o">-</span><span class="n">k4</span><span class="p">,</span><span class="mi">4</span><span
+                                    class="n">n</span> <span class="n">data</span><span class="o">/</span><span
+                                    class="n">volvox</span><span class="o">.</span><span class="n">gff3</span> <span
+                                    class="o">&gt;</span> <span class="n">data</span><span class="o">/</span><span
+                                    class="n">volvox</span><span class="o">.</span><span class="n">sorted</span><span
+                                    class="o">.</span><span class="n">gff3</span>
+<span class="n">bgzip</span> <span class="n">data</span><span class="o">/</span><span class="n">volvox</span><span
+                                        class="o">.</span><span class="n">sorted</span><span class="o">.</span><span
+                                        class="n">gff3</span>
+<span class="n">tabix</span> <span class="o">-</span><span class="n">p</span> <span class="n">gff</span> <span
+                                        class="n">data</span><span class="o">/</span><span class="n">volvox</span><span
+                                        class="o">.</span><span class="n">sorted</span><span class="o">.</span><span
+                                        class="n">gff3</span><span class="o">.</span><span class="n">gz</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>在data/tracks.conf中加入一下配置:</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="p">[</span><span
+                                    class="n">tracks</span><span class="o">.</span><span class="n">genes</span><span
+                                    class="p">]</span>
+<span class="n">urlTemplate</span><span class="o">=</span><span class="n">volvox</span><span class="o">.</span><span
+                                        class="n">sorted</span><span class="o">.</span><span class="n">gff3</span><span
+                                        class="o">.</span><span class="n">gz</span>
+<span class="n">storeClass</span><span class="o">=</span><span class="n">JBrowse</span><span class="o">/</span><span
+                                        class="n">Store</span><span class="o">/</span><span
+                                        class="n">SeqFeature</span><span class="o">/</span><span
+                                        class="n">GFF3Tabix</span>
+<span class="nb">type</span><span class="o">=</span><span class="n">CanvasFeatures</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>完成!</p>
+                    </div>
+                    <div class="section" id="bam">
+                        <h2>加载BAM<a class="headerlink" href="#bam" title="永久链接至标题">¶</a></h2>
+                        <p>如果已获得序列比对，也可以创建一个显示比对的“比对”轨迹
+                            对于volvox，我们得到一个文件</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="n">curl</span> <span
+                                    class="o">-</span><span class="n">L</span> <span class="n">https</span><span
+                                    class="p">:</span><span class="o">//</span><span class="n">jbrowse</span><span
+                                    class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">code</span><span
+                                    class="o">/</span><span class="n">JBrowse</span><span class="o">-</span><span
+                                    class="mf">1.16</span><span class="o">.</span><span class="mi">7</span><span
+                                    class="o">/</span><span class="n">docs</span><span class="o">/</span><span
+                                    class="n">tutorial</span><span class="o">/</span><span
+                                    class="n">data_files</span><span class="o">/</span><span
+                                    class="n">volvox</span><span class="o">-</span><span class="nb">sorted</span><span
+                                    class="o">.</span><span class="n">bam</span> <span class="o">&gt;</span> <span
+                                    class="n">data</span><span class="o">/</span><span class="n">volvox</span><span
+                                    class="o">-</span><span class="nb">sorted</span><span class="o">.</span><span
+                                    class="n">bam</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>请注意，此BAM文件已经排序。 如果您的BAM未排序，则必须对其进行排序以在JBrowse中使用。使用以下命令行:</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="n">samtools</span> <span class="n">index</span> <span
+                                    class="n">data</span><span class="o">/</span><span class="n">volvox</span><span
+                                    class="o">-</span><span class="nb">sorted</span><span class="o">.</span><span
+                                    class="n">bam</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>最后在data/tracks.conf中添加以下内容:</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="p">[</span><span
+                                    class="n">tracks</span><span class="o">.</span><span
+                                    class="n">alignments</span><span class="p">]</span>
+<span class="n">urlTemplate</span><span class="o">=</span><span class="n">volvox</span><span class="o">-</span><span
+                                        class="nb">sorted</span><span class="o">.</span><span class="n">bam</span>
+<span class="n">storeClass</span><span class="o">=</span><span class="n">JBrowse</span><span class="o">/</span><span
+                                        class="n">Store</span><span class="o">/</span><span
+                                        class="n">SeqFeature</span><span class="o">/</span><span class="n">BAM</span>
+<span class="nb">type</span><span class="o">=</span><span class="n">Alignments2</span>
+</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section" id="id2">
+                        <h2>检查您的文件是否已经加载成功<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+                        <p>此时，如果jbrowse文件位于您的Web服务器中，则应具有目录布局，例如</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="o">/</span><span
+                                    class="n">var</span><span class="o">/</span><span class="n">www</span><span
+                                    class="o">/</span><span class="n">html</span><span class="o">/</span><span
+                                    class="n">jbrowse</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span
+                                        class="o">/</span><span class="n">html</span><span class="o">/</span><span
+                                        class="n">jbrowse</span><span class="o">/</span><span class="n">data</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span
+                                        class="o">/</span><span class="n">html</span><span class="o">/</span><span
+                                        class="n">jbrowse</span><span class="o">/</span><span class="n">data</span><span
+                                        class="o">/</span><span class="n">volvox</span><span class="o">.</span><span
+                                        class="n">fa</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span
+                                        class="o">/</span><span class="n">html</span><span class="o">/</span><span
+                                        class="n">jbrowse</span><span class="o">/</span><span class="n">data</span><span
+                                        class="o">/</span><span class="n">volvox</span><span class="o">.</span><span
+                                        class="n">fa</span><span class="o">.</span><span class="n">fai</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span
+                                        class="o">/</span><span class="n">html</span><span class="o">/</span><span
+                                        class="n">jbrowse</span><span class="o">/</span><span class="n">data</span><span
+                                        class="o">/</span><span class="n">volvox</span><span class="o">.</span><span
+                                        class="n">sorted</span><span class="o">.</span><span class="n">gff3</span><span
+                                        class="o">.</span><span class="n">gz</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span
+                                        class="o">/</span><span class="n">html</span><span class="o">/</span><span
+                                        class="n">jbrowse</span><span class="o">/</span><span class="n">data</span><span
+                                        class="o">/</span><span class="n">volvox</span><span class="o">.</span><span
+                                        class="n">sorted</span><span class="o">.</span><span class="n">gff3</span><span
+                                        class="o">.</span><span class="n">gz</span><span class="o">.</span><span
+                                        class="n">tbi</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span
+                                        class="o">/</span><span class="n">html</span><span class="o">/</span><span
+                                        class="n">jbrowse</span><span class="o">/</span><span class="n">data</span><span
+                                        class="o">/</span><span class="n">volvox</span><span class="o">-</span><span
+                                        class="nb">sorted</span><span class="o">.</span><span class="n">bam</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span
+                                        class="o">/</span><span class="n">html</span><span class="o">/</span><span
+                                        class="n">jbrowse</span><span class="o">/</span><span class="n">data</span><span
+                                        class="o">/</span><span class="n">volvox</span><span class="o">-</span><span
+                                        class="nb">sorted</span><span class="o">.</span><span class="n">bam</span><span
+                                        class="o">.</span><span class="n">bai</span>
+<span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span
+                                        class="o">/</span><span class="n">html</span><span class="o">/</span><span
+                                        class="n">jbrowse</span><span class="o">/</span><span class="n">data</span><span
+                                        class="o">/</span><span class="n">tracks</span><span class="o">.</span><span
+                                        class="n">conf</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>你的tracks.conf文件夹中的内容如下:</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="p">[</span><span
+                                    class="n">GENERAL</span><span class="p">]</span>
+<span class="n">refSeqs</span><span class="o">=</span><span class="n">volvox</span><span class="o">.</span><span
+                                        class="n">fa</span><span class="o">.</span><span class="n">fai</span>
+
+<span class="p">[</span><span class="n">tracks</span><span class="o">.</span><span class="n">refseq</span><span
+                                        class="p">]</span>
+<span class="n">urlTemplate</span><span class="o">=</span><span class="n">volvox</span><span class="o">.</span><span
+                                        class="n">fa</span>
+<span class="n">storeClass</span><span class="o">=</span><span class="n">JBrowse</span><span class="o">/</span><span
+                                        class="n">Store</span><span class="o">/</span><span
+                                        class="n">SeqFeature</span><span class="o">/</span><span
+                                        class="n">IndexedFasta</span>
+<span class="nb">type</span><span class="o">=</span><span class="n">Sequence</span>
+
+<span class="p">[</span><span class="n">tracks</span><span class="o">.</span><span class="n">genes</span><span
+                                        class="p">]</span>
+<span class="n">urlTemplate</span><span class="o">=</span><span class="n">volvox</span><span class="o">.</span><span
+                                        class="n">sorted</span><span class="o">.</span><span class="n">gff3</span><span
+                                        class="o">.</span><span class="n">gz</span>
+<span class="n">storeClass</span><span class="o">=</span><span class="n">JBrowse</span><span class="o">/</span><span
+                                        class="n">Store</span><span class="o">/</span><span
+                                        class="n">SeqFeature</span><span class="o">/</span><span
+                                        class="n">GFF3Tabix</span>
+<span class="nb">type</span><span class="o">=</span><span class="n">CanvasFeatures</span>
+
+<span class="p">[</span><span class="n">tracks</span><span class="o">.</span><span class="n">alignments</span><span
+                                        class="p">]</span>
+<span class="n">urlTemplate</span><span class="o">=</span><span class="n">volvox</span><span class="o">-</span><span
+                                        class="nb">sorted</span><span class="o">.</span><span class="n">bam</span>
+<span class="n">storeClass</span><span class="o">=</span><span class="n">JBrowse</span><span class="o">/</span><span
+                                        class="n">Store</span><span class="o">/</span><span
+                                        class="n">SeqFeature</span><span class="o">/</span><span class="n">BAM</span>
+<span class="nb">type</span><span class="o">=</span><span class="n">Alignments2</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>然后，您可以访问http：// localhost / jbrowse /将自动加载“data”目录。</p>
+                        <p>示例图如下:</p>
+                        <img alt="https://i.loli.net/2020/01/29/sqaibQEHCl8fOMv.png"
+                             src="https://i.loli.net/2020/01/29/sqaibQEHCl8fOMv.png"/>
+                    </div>
+                    <div class="section" id="id3">
+                        <h2>祝贺!<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+                        <p>您现在成功配置了JBrowse.</p>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <h1 class="logo"><a href="index.html">JBrowse</a></h1>
+
+
+            <h3>导航</h3>
+            <p class="caption"><span class="caption-text">Contents:</span></p>
+            <ul class="current">
+                <li class="toctree-l1"><a class="reference internal" href="install.html">JBrowse中文文档</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="install.html#id1">安装</a></li>
+                <li class="toctree-l1 current"><a class="current reference internal" href="#">索引文件格式</a>
+                    <ul>
+                        <li class="toctree-l2"><a class="reference internal" href="#fasta">加载FASTA格式的索引</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#tabix-gff3">加载Tabix GFF3</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#bam">加载BAM</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#id2">检查您的文件是否已经加载成功</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#id3">祝贺!</a></li>
+                    </ul>
+                </li>
+                <li class="toctree-l1"><a class="reference internal" href="class_guide.html">经典快速入门指南</a></li>
+            </ul>
+
+            <div class="relations">
+                <h3>Related Topics</h3>
+                <ul>
+                    <li><a href="index.html">Documentation overview</a>
+                        <ul>
+                            <li>Previous: <a href="install.html" title="上一章">JBrowse中文文档</a></li>
+                            <li>Next: <a href="class_guide.html" title="下一章">经典快速入门指南</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="searchbox" style="display: none" role="search">
+                <h3 id="searchlabel">快速搜索</h3>
+                <div class="searchformwrapper">
+                    <form class="search" action="search.html" method="get">
+                        <input type="text" name="q" aria-labelledby="searchlabel"/>
+                        <input type="submit" value="转向"/>
+                    </form>
+                </div>
+            </div>
+            <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+        </div>
+    </div>
+    <div class="clearer"></div>
+</div>
+<div class="footer">
+    &copy;2020, zhoupeng.
+
+    |
+    Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
+    &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+
+    |
+    <a href="_sources/index_file.rst.txt"
+       rel="nofollow">Page source</a>
+</div>
+
+
+</body>
+</html>

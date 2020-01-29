@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
+<head>
+    <meta charset="utf-8"/>
+    <title>经典快速入门指南 &#8212; JBrowse 0.0.1 文档</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css"/>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
+    <script type="text/javascript" id="documentation_options" data-url_root="./"
+            src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html"/>
+    <link rel="search" title="搜索" href="search.html"/>
+    <link rel="prev" title="索引文件格式" href="index_file.html"/>
+
+    <link rel="stylesheet" href="_static/custom.css" type="text/css"/>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9"/>
+
+</head>
+<body>
+
+
+<div class="document">
+    <div class="documentwrapper">
+        <div class="bodywrapper">
+
+
+            <div class="body" role="main">
+
+                <div class="section" id="id1">
+                    <h1>经典快速入门指南<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+                    <div class="section" id="id2">
+                        <h2>参考序列<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+                        <p>在加载注释数据之前，请使用 <code class="docutils literal notranslate"><span class="pre">bin/prepare-refseqs.pl</span></code>
+                            格式化JBrowse的参考序列。
+                            对于FASTA格式序列文件</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="nb">bin</span><span class="o">/</span><span
+                                    class="n">prepare</span><span class="o">-</span><span class="n">refseqs</span><span
+                                    class="o">.</span><span class="n">pl</span> <span class="o">--</span><span
+                                    class="n">fasta</span> <span class="n">docs</span><span class="o">/</span><span
+                                    class="n">tutorial</span><span class="o">/</span><span
+                                    class="n">data_files</span><span class="o">/</span><span
+                                    class="n">volvox</span><span class="o">.</span><span class="n">fa</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>对于已经存储在Bio :: DB :: <a href="#id3"><span class="problematic" id="id4">*</span></a>数据库中的序列，可以将prepare-refseqs.pl与biodb-to-json.pl配置结合使用
+                        </p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="nb">bin</span><span class="o">/</span><span
+                                    class="n">prepare</span><span class="o">-</span><span class="n">refseqs</span><span
+                                    class="o">.</span><span class="n">pl</span> <span class="o">--</span><span
+                                    class="n">conf</span> <span class="n">docs</span><span class="o">/</span><span
+                                    class="n">tutorial</span><span class="o">/</span><span
+                                    class="n">conf_files</span><span class="o">/</span><span
+                                    class="n">volvox</span><span class="o">.</span><span class="n">json</span>
+</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section" id="id5">
+                        <h2>基因组注释和特征<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
+                        <p>JBrowse可以从平面文件或具有Bio :: DB :: * Perl接口的数据库中导入数据。</p>
+                    </div>
+                    <div class="section" id="bin-flatfile-to-json-pl">
+                        <h2>bin/flatfile-to-json.pl<a class="headerlink" href="#bin-flatfile-to-json-pl"
+                                                      title="永久链接至标题">¶</a></h2>
+                        <p>如果您有平面文件，例如GFF3或BED，通常最好使用bin / flatfile-to-json.pl导入它们。
+                            bin / flatfile-to-json.pl接受许多不同的命令行设置，
+                            这些设置可用于自定义新track的外观。
+                            运行bin / flatfile-to-json.pl –help查看可用设置的描述。</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="nb">bin</span><span class="o">/</span><span
+                                    class="n">flatfile</span><span class="o">-</span><span class="n">to</span><span
+                                    class="o">-</span><span class="n">json</span><span class="o">.</span><span
+                                    class="n">pl</span> <span class="o">--</span><span class="n">gff</span> <span
+                                    class="n">path</span><span class="o">/</span><span class="n">to</span><span
+                                    class="o">/</span><span class="n">my</span><span class="o">.</span><span class="n">gff3</span> <span
+                                    class="o">--</span><span class="n">trackType</span> <span
+                                    class="n">CanvasFeatures</span> <span class="o">--</span><span
+                                    class="n">trackLabel</span> <span class="n">mygff</span>
+</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section" id="bin-biodb-to-json-pl">
+                        <h2>bin/biodb-to-json.pl<a class="headerlink" href="#bin-biodb-to-json-pl" title="永久链接至标题">¶</a>
+                        </h2>
+                        <p>如果您拥有基因组注释数据库，例如Chado，Bio :: DB :: SeqFeature :: Store或Bio :: DB ::
+                            GFF，则可以使用JBrowse的biodb-to-json.pl。
+                            您将bin / biodb-to-json.pl与配置文件一起使用（其格式在此处记录）。</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="nb">bin</span><span class="o">/</span><span
+                                    class="n">biodb</span><span class="o">-</span><span class="n">to</span><span
+                                    class="o">-</span><span class="n">json</span><span class="o">.</span><span
+                                    class="n">pl</span> <span class="o">--</span><span class="n">conf</span> <span
+                                    class="n">docs</span><span class="o">/</span><span class="n">tutorial</span><span
+                                    class="o">/</span><span class="n">conf_files</span><span class="o">/</span><span
+                                    class="n">volvox</span><span class="o">.</span><span class="n">json</span>
+</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section" id="next-gen-reads-bam">
+                        <h2>Next-gen reads (BAM)<a class="headerlink" href="#next-gen-reads-bam" title="永久链接至标题">¶</a>
+                        </h2>
+                        <p>JBrowse可以直接从BAM文件显示对齐方式，而无需进行预处理。
+                            要使用该文件，请将BAM文件和BAM索引下载到您的数据文件夹中，
+                            然后您可以将文本片段手动编辑到tracks.conf中:</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="p">[</span><span
+                                    class="n">tracks</span><span class="o">.</span><span
+                                    class="n">alignments</span><span class="p">]</span>
+<span class="n">storeClass</span> <span class="o">=</span> <span class="n">JBrowse</span><span class="o">/</span><span
+                                        class="n">Store</span><span class="o">/</span><span
+                                        class="n">SeqFeature</span><span class="o">/</span><span class="n">BAM</span>
+<span class="n">urlTemplate</span> <span class="o">=</span> <span class="n">myfile</span><span class="o">.</span><span
+                                        class="n">bam</span>
+<span class="n">category</span> <span class="o">=</span> <span class="n">NGS</span>
+<span class="nb">type</span> <span class="o">=</span> <span class="n">JBrowse</span><span class="o">/</span><span
+                                        class="n">View</span><span class="o">/</span><span class="n">Track</span><span
+                                        class="o">/</span><span class="n">Alignments2</span>
+<span class="n">key</span> <span class="o">=</span> <span class="n">BAM</span> <span class="n">alignments</span> <span
+                                        class="kn">from</span> <span class="nn">SEQ1654</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>然后,你需要在data文件夹中存在以下文件:</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="n">data</span><span class="o">/</span><span
+                                    class="n">myfile</span><span class="o">.</span><span class="n">bam</span>
+<span class="n">data</span><span class="o">/</span><span class="n">myfile</span><span class="o">.</span><span class="n">bam</span><span
+                                        class="o">.</span><span class="n">bai</span>
+<span class="n">data</span><span class="o">/</span><span class="n">tracks</span><span class="o">.</span><span class="n">conf</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>在tracks.conf包含上述配置的地方，然后myfile.bam将相对于tracks.conf的位置进行定位，
+                            因此由于它们位于同一目录中，因此不需要任何其他路径限定。 请注意，urlTemplate可以是完整的URL路径.</p>
+                        <p>另请注意：BAM文件需要排序和索引（即具有对应的.bai文件或.csi文件。如果为.csi，则可以使用csiUrlTemplate。
+                            如果为.bai，则将自动定位它 作为&lt;yourbamfile.bam&gt;，最后加上.bai）。</p>
+                    </div>
+                    <div class="section" id="next-gen-read-track">
+                        <h2>Next-gen read track类型<a class="headerlink" href="#next-gen-read-track" title="永久链接至标题">¶</a>
+                        </h2>
+                        <p>JBrowse有两种主要的轨道类型，这些轨道类型专门设计用于BAM数据：</p>
+                        <p>Alignments2
+                            显示BAM文件中的各个比对，以及BAM的MD或CIGAR字段中编码的插入，删除，跳过的区域和SNP。</p>
+                        <p>SNPCoverage
+                            显示覆盖度直方图，彩色条显示碱基水平不匹配和读数中可能的SNP的位置。</p>
+                        <p>要使用它们，请在轨道配置中设置type = Alignments2或type = SNPCoverage。</p>
+                    </div>
+                    <div class="section" id="index-names">
+                        <h2>Index Names<a class="headerlink" href="#index-names" title="永久链接至标题">¶</a></h2>
+                        <p>加载要素数据后，要让用户通过在自动完成搜索框中键入要素名称或ID来查找要素，必须使用 <code class="docutils literal notranslate"><span
+                                class="pre">bin/generate-names.pl</span></code> 生成要素名称的特殊索引。</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="nb">bin</span><span class="o">/</span><span
+                                    class="n">generate</span><span class="o">-</span><span class="n">names</span><span
+                                    class="o">.</span><span class="n">pl</span> <span class="o">-</span><span class="n">v</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>注意：每次使用任何* -to-json.pl脚本向JBrowse添加新注释时，都需要重新运行 <code
+                                class="docutils literal notranslate"><span
+                                class="pre">bin/generate-names.pl</span></code> 将新功能名称添加到索引。</p>
+                        <p>还要注意：bin / generate-names.pl索引的轨道类型包括:</p>
+                        <ul class="simple">
+                            <li><p>GFF，GBK，BED通过flatfile-to-json.pl加载。 默认情况下，对“ ID”，“名称”和“别名”建立索引。
+                                请注意，–nameAttributes可用于索引其他字段</p></li>
+                            <li><p>Features from biodb-to-json.pl</p></li>
+                            <li><p>VCF tabix文件和GFF3 tabix文件（对它们从GFF的“ ID”和“名称”字段建立索引，并且仅对来自VCF的ID进行索引）</p></li>
+                        </ul>
+                        <p>BAM的reads和BigWigs不会由generate-names.pl编制索引</p>
+                    </div>
+                    <div class="section" id="bigwigwiggle">
+                        <h2>定量轨道（BigWig和Wiggle）<a class="headerlink" href="#bigwigwiggle" title="永久链接至标题">¶</a></h2>
+                        <p>JBrowse可以直接从BigWig文件显示对齐方式，而无需进行预处理。 只需将带有文件相对URL的节添加到您的data / tracks.conf文件中，格式为：</p>
+                        <div class="highlight-default notranslate">
+                            <div class="highlight"><pre><span></span><span class="p">[</span> <span
+                                    class="n">tracks</span><span class="o">.</span><span class="n">my</span><span
+                                    class="o">-</span><span class="n">bigwig</span><span class="o">-</span><span
+                                    class="n">track</span> <span class="p">]</span>
+<span class="n">storeClass</span> <span class="o">=</span> <span class="n">JBrowse</span><span class="o">/</span><span
+                                        class="n">Store</span><span class="o">/</span><span
+                                        class="n">SeqFeature</span><span class="o">/</span><span class="n">BigWig</span>
+<span class="n">urlTemplate</span> <span class="o">=</span> <span class="n">myfile</span><span class="o">.</span><span
+                                        class="n">bw</span>
+<span class="nb">type</span> <span class="o">=</span> <span class="n">JBrowse</span><span class="o">/</span><span
+                                        class="n">View</span><span class="o">/</span><span class="n">Track</span><span
+                                        class="o">/</span><span class="n">Wiggle</span><span class="o">/</span><span
+                                        class="n">XYPlot</span>
+<span class="n">key</span> <span class="o">=</span> <span class="n">Coverage</span> <span class="n">plot</span> <span
+                                        class="n">of</span> <span class="n">NGS</span> <span class="n">alignments</span> <span
+                                        class="kn">from</span> <span class="nn">XYZ</span>
+</pre>
+                            </div>
+                        </div>
+                        <p>JBrowse有两种专门用于定量数据的track类型：</p>
+                        <ul class="simple">
+                            <li><p>JBrowse/View/Track/Wiggle/XYPlot</p></li>
+                        </ul>
+                        <p>将定量数据显示为条形图。 有关配置选项，请参见JBrowse Wiki。</p>
+                        <ul class="simple">
+                            <li><p>JBrowse/View/Track/Wiggle/Density</p></li>
+                        </ul>
+                        <p>将定量数据显示为“热图”图，默认情况下，其具有正分数的区域绘制为逐渐变深的蓝色，而具有负分数的区域绘制为逐渐变深的红色。 有关配置选项，请参见JBrowse
+                            Wiki，包括如何更改颜色改变点（bicolor_pivot）和颜色。</p>
+                        <p>要使用它们，请在轨道配置中设置type = JBrowse / View / Track / Wiggle / XYPlot或type = JBrowse / View / Track
+                            / Wiggle / Density。</p>
+                    </div>
+                    <div class="section" id="id6">
+                        <h2>结论<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+                        <p>祝您好运，并享受JBrowse！</p>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <h1 class="logo"><a href="index.html">JBrowse</a></h1>
+
+
+            <h3>导航</h3>
+            <p class="caption"><span class="caption-text">Contents:</span></p>
+            <ul class="current">
+                <li class="toctree-l1"><a class="reference internal" href="install.html">JBrowse中文文档</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="install.html#id1">安装</a></li>
+                <li class="toctree-l1"><a class="reference internal" href="index_file.html">索引文件格式</a></li>
+                <li class="toctree-l1 current"><a class="current reference internal" href="#">经典快速入门指南</a>
+                    <ul>
+                        <li class="toctree-l2"><a class="reference internal" href="#id2">参考序列</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#id5">基因组注释和特征</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#bin-flatfile-to-json-pl">bin/flatfile-to-json.pl</a>
+                        </li>
+                        <li class="toctree-l2"><a class="reference internal" href="#bin-biodb-to-json-pl">bin/biodb-to-json.pl</a>
+                        </li>
+                        <li class="toctree-l2"><a class="reference internal" href="#next-gen-reads-bam">Next-gen reads
+                            (BAM)</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#next-gen-read-track">Next-gen read
+                            track类型</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#index-names">Index Names</a></li>
+                        <li class="toctree-l2"><a class="reference internal"
+                                                  href="#bigwigwiggle">定量轨道（BigWig和Wiggle）</a></li>
+                        <li class="toctree-l2"><a class="reference internal" href="#id6">结论</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="relations">
+                <h3>Related Topics</h3>
+                <ul>
+                    <li><a href="index.html">Documentation overview</a>
+                        <ul>
+                            <li>Previous: <a href="index_file.html" title="上一章">索引文件格式</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="searchbox" style="display: none" role="search">
+                <h3 id="searchlabel">快速搜索</h3>
+                <div class="searchformwrapper">
+                    <form class="search" action="search.html" method="get">
+                        <input type="text" name="q" aria-labelledby="searchlabel"/>
+                        <input type="submit" value="转向"/>
+                    </form>
+                </div>
+            </div>
+            <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+        </div>
+    </div>
+    <div class="clearer"></div>
+</div>
+<div class="footer">
+    &copy;2020, zhoupeng.
+
+    |
+    Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
+    &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+
+    |
+    <a href="_sources/class_guide.rst.txt"
+       rel="nofollow">Page source</a>
+</div>
+
+
+</body>
+</html>
